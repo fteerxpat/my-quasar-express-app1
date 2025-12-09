@@ -1,78 +1,107 @@
 <template>
-  <q-page padding>
-    <div class="text-h4 q-mb-md">
-      Version Control + Docker Demo (Quasar)
+  <div class="q-pa-md">
+    <div class="q-pb-lg">
+      <q-toggle v-model="dense" label="Dense QSelect" />
+      <q-toggle v-model="denseOpts" label="Dense options" />
     </div>
-    <q-card class="q-mb-md">
-      <q-card-section>
-        <div class="text-h6">Git Workflow (ตัวอย่างขันตอนทํางาน)</div>
-        <q-list bordered separator class="q-mt-sm">
-          <q-item v-for="(step, index) in gitSteps" :key="index">
-            <q-item-section avatar>
-              <q-badge>{{ index + 1 }}</q-badge>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ step.title }}</q-item-label>
-              <q-item-label caption>{{ step.detail }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
-    </q-card>
-    <q-card>
-      <q-card-section>
-        <div class="text-h6">Docker Concepts (สรุปสัน ๆ)</div>
-        <q-list bordered separator class="q-mt-sm">
-          <q-item v-for="(item, index) in dockerItems" :key="index">
-            <q-item-section>
-              <q-item-label>{{ item.title }}</q-item-label>
-              <q-item-label caption>{{ item.detail }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
-    </q-card>
-  </q-page>
+
+    <div class="q-gutter-md" style="max-width: 300px">
+      <q-select filled v-model="model" :options="options" label="Label (stacked)" stack-label :dense="dense" :options-dense="denseOpts" />
+
+      <q-select outlined v-model="model" :options="options" :dense="dense" :options-dense="denseOpts">
+        <template v-slot:prepend>
+          <q-icon name="event" />
+        </template>
+      </q-select>
+
+      <q-select standout v-model="model" :options="options" :dense="dense" :options-dense="denseOpts">
+        <template v-slot:append>
+          <q-avatar>
+            <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg">
+          </q-avatar>
+        </template>
+      </q-select>
+
+      <q-select filled bottom-slots v-model="model" :options="options" label="Label" counter :dense="dense" :options-dense="denseOpts">
+        <template v-slot:prepend>
+          <q-icon name="place" @click.stop.prevent />
+        </template>
+        <template v-slot:append>
+          <q-icon name="close" @click.stop.prevent="model = ''" class="cursor-pointer" />
+        </template>
+
+        <template v-slot:hint>
+          Field hint
+        </template>
+      </q-select>
+
+      <q-select rounded outlined bottom-slots v-model="model" :options="options" label="Label" counter maxlength="12" :dense="dense" :options-dense="denseOpts">
+        <template v-slot:before>
+          <q-icon name="flight_takeoff" />
+        </template>
+
+        <template v-slot:append>
+          <q-icon v-if="model !== ''" name="close" @click.stop.prevent="model = ''" class="cursor-pointer" />
+          <q-icon name="search" @click.stop.prevent />
+        </template>
+
+        <template v-slot:hint>
+          Field hint
+        </template>
+      </q-select>
+
+      <q-select filled bottom-slots v-model="model" :options="options" label="Label" counter maxlength="12" :dense="dense" :options-dense="denseOpts">
+        <template v-slot:before>
+          <q-avatar>
+            <img src="https://cdn.quasar.dev/img/avatar5.jpg">
+          </q-avatar>
+        </template>
+
+        <template v-slot:append>
+          <q-icon v-if="model !== ''" name="close" @click.stop.prevent="model = ''" class="cursor-pointer" />
+          <q-icon name="schedule" @click.stop.prevent />
+        </template>
+
+        <template v-slot:hint>
+          Field hint
+        </template>
+
+        <template v-slot:after>
+          <q-btn round dense flat icon="send" />
+        </template>
+      </q-select>
+
+      <q-select filled bottom-slots v-model="model" :options="options" label="Label" counter maxlength="12" :dense="dense" :options-dense="denseOpts">
+        <template v-slot:before>
+          <q-icon name="event" />
+        </template>
+
+        <template v-slot:hint>
+          Field hint
+        </template>
+
+        <template v-slot:append>
+          <q-btn round dense flat icon="add" @click.stop.prevent />
+        </template>
+      </q-select>
+    </div>
+  </div>
 </template>
-<script setup>
-const gitSteps = [
-  {
-    title: 'แก้โค้ด Quasar ใน src/',
-    detail: 'เพิมหน้า / component ใหม่ เช่น IndexPage.vue, Layout ต่าง ๆ',
-  },
-  {
-    title: 'ตรวจสอบสถานะไฟล์',
-    detail: 'ใช้คําสัง `git status` ดูว่าไฟล์ไหนเปลียนแปลงบ้าง',
-  },
-  {
-    title: 'เพิมไฟล์เข้า staging',
-    detail: 'ใช้ `git add .` หรือ `git add src/pages/IndexPage.vue`',
-  },
-  {
-    title: 'สร้าง commit พร้อมข้อความแบบ Conventional Commits',
-    detail: 'เช่น `feat: add Git workflow demo page`',
-  },
-  {
-    title: 'push ขึน GitHub',
-    detail: 'ใช้ `git push origin feature/quasar-demo` แล้วเปิด Pull Request',
-  },
-]
-const dockerItems = [
-  {
-    title: 'Image',
-    detail: 'แม่พิมพ์ของ container สร้างจาก Dockerfile เช่น image สําหรับ Quasar SPA',
-  },
-  {
-    title: 'Container',
-    detail: 'instance ของ image ทีกําลังรัน เช่น container ทีรัน Nginx เสิร์ฟไฟล์ของ Quasar',
-  },
-  {
-    title: 'Volume',
-    detail: 'ใช้เก็บข้อมูลถาวร เช่น log / ไฟล์ upload (frontend อาจไม่ใช้มากเท่า backend)',
-  },
-  {
-    title: 'Network',
-    detail: 'เชือม container ระหว่างกัน เช่น frontend คุยกับ backend ผ่าน network ของ Docker',
-  },
-]
+<script>
+import { ref } from 'vue'
+
+export default {
+  setup () {
+    return {
+      model: ref(null),
+
+      options: [
+        'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
+      ],
+
+      dense: ref(false),
+      denseOpts: ref(false)
+    }
+  }
+}
 </script>
