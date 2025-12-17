@@ -2,6 +2,23 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+<<<<<<< HEAD
+// 1. เพิ่ม Prisma Client
+const { PrismaClient } = require('@prisma/client');
+
+require('dotenv').config();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+// 2. สร้าง instance ของ Prisma
+const prisma = new PrismaClient();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// ... (ส่วน log directory เหมือนเดิม) ...
+=======
 require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,10 +26,47 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());  // อนุญาต cross-origin จาก frontend
 app.use(express.json());
 // สร้างโฟลเดอร์ logs ถ้ายังไม่มี (สําหรับ volume demo)
+>>>>>>> a6c44ef8090586f6c7367d607d539226a88fcc07
 const logsDir = path.join(__dirname, 'logs');
 if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir);
 }
+<<<<<<< HEAD
+
+// Endpoint demo เดิม
+app.get('/api/demo', (req, res) => {
+    // ... (code เดิม) ...
+    res.json({ status: 'ok' }); // ย่อเพื่อความกระชับ
+});
+
+// --- 3. เพิ่มส่วนนี้เข้าไปครับ ---
+// API สำหรับดึง Tasks ทั้งหมด
+app.get('/api/tasks', async (req, res) => {
+  try {
+    // ดึงข้อมูลจากตาราง task (เช็คชื่อ model ใน schema.prisma ด้วยนะครับ ว่าเป็น task หรือ Task)
+    const tasks = await prisma.task.findMany();
+    res.json(tasks);
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ error: 'Failed to fetch tasks' });
+  }
+});
+
+// API สำหรับสร้าง Task ใหม่ (เผื่อต้องใช้)
+app.post('/api/tasks', async (req, res) => {
+  const { title } = req.body;
+  try {
+    const newTask = await prisma.task.create({
+      data: { title },
+    });
+    res.json(newTask);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create task' });
+  }
+});
+// ------------------------------
+
+=======
 // Endpoint demo: Return Git + Docker info และ log request
 app.get('/api/demo', (req, res) => {
   const logMessage = `Request at ${new Date().toISOString()}: ${req.ip}\n`;
@@ -28,11 +82,16 @@ app.get('/api/demo', (req, res) => {
     }
   });
 });
+>>>>>>> a6c44ef8090586f6c7367d607d539226a88fcc07
 // Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
+<<<<<<< HEAD
+
+=======
+>>>>>>> a6c44ef8090586f6c7367d607d539226a88fcc07
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
