@@ -1,5 +1,6 @@
 // prisma/schema.prisma
 generator client {
+<<<<<<< HEAD
   provider      = "prisma-client-js"
   // เพิ่มบรรทัดนี้เข้าไปครับ
   // "native" = เครื่องเรา, "linux-musl-openssl-3.0.x" = Docker (Alpine)
@@ -9,6 +10,13 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+=======
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  // URL จะไปอยู่ใน prisma.config.ts แทน
+>>>>>>> a6c44ef8090586f6c7367d607d539226a88fcc07
 }
 model Task {
   id          String   @id @default(uuid())
