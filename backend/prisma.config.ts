@@ -8,6 +8,6 @@ export default defineConfig({
   },
   datasource: {
     // อ่านค่า DATABASE_URL จาก .env
-    url: env('DATABASE_URL'),
+    // url: env('DATABASE_URL'),
   },
 });

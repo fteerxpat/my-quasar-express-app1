@@ -1,22 +1,25 @@
 # Stage 1: Build Quasar SPA
 FROM node:20-alpine AS builder
+
+# 1. ลง Quasar CLI ทั่วโลก
+RUN npm install -g @quasar/cli
+
 WORKDIR /app
-# Copy package files และ install dependencies
+
+# 2. ก๊อปปี้ไฟล์ package
 COPY package*.json ./
-<<<<<<< HEAD
-RUN npm ci --legacy-peer-deps --ignore-scripts
-=======
-RUN npm ci --legacy-peer-deps  # เพิม --legacy-peer-deps ถ้ามี issue กับ dependencies
->>>>>>> a6c44ef8090586f6c7367d607d539226a88fcc07
-# Copy source code
+
+# 3. แก้ไขตรงนี้: เพิ่ม --ignore-scripts เพื่อไม่ให้มันรัน quasar prepare ตอนนี้
+RUN npm install --legacy-peer-deps --ignore-scripts
+
+# 4. ก๊อปปี้โค้ดและไฟล์ตั้งค่าทั้งหมด (รวมถึง quasar.config.js) เข้ามา
 COPY . .
-# Build Quasar (สําหรับ SPA)
+
+# 5. สั่ง Build (ขั้นตอนนี้จะจัดการเรื่องเตรียมไฟล์ให้เอง)
 RUN npm run build
-# Stage 2: Production (Nginx serve static files)
+
+# Stage 2: Production (Nginx)
 FROM nginx:1.27-alpine
-# Copy build artifacts จาก stage 1
 COPY --from=builder /app/dist/spa /usr/share/nginx/html
-# Expose port
 EXPOSE 80
-# Run Nginx
 CMD ["nginx", "-g", "daemon off;"]
