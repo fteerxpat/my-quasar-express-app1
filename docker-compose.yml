@@ -8,7 +8,7 @@ services:
     ports:
       - "8080:80"
     environment:
-      - VITE_API_URL=http://backend:3000   # ใช้ชื่อ service เป็น URL ภายใน
+      - VITE_API_URL=http://backend:3000 # ใช้ชื่อ service เป็น URL ภายใน
     networks:
       - app-network
     restart: unless-stopped
@@ -22,12 +22,12 @@ services:
     environment:
       - PORT=3000
     volumes:
-      - ./backend/logs:/app/logs   # Persist logs
+      - ./backend/logs:/app/logs # Persist logs
     networks:
       - app-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/demo"]
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/demo" ]
       interval: 30s
       timeout: 10s
       retries: 3
